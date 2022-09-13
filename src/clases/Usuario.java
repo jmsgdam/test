@@ -18,6 +18,9 @@ public class Usuario implements Serializable{
         this.nombre = nombre;
         this.pass = pass;
     }//fin constructor
+    
+    
+    
 
     public String getNombre() {
         return nombre;

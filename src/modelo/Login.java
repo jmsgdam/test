@@ -5,6 +5,14 @@
 package modelo;
 
 import clases.Usuario;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,6 +25,10 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        
+        conexiones.ConexionesFicheros.leerArchivoUsuarios();
+        
+        
     }
 
     /**
@@ -33,6 +45,7 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextField_passUsuario = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jButton_listarUsuario = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton_salir = new javax.swing.JButton();
         jButton_aceptar = new javax.swing.JButton();
@@ -44,22 +57,34 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setText("CONTRASEÑA");
 
+        jButton_listarUsuario.setText("LISTAR USUARIOS");
+        jButton_listarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_listarUsuarioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_passUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField_passUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField_loginUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_loginUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50))
+                        .addGap(107, 107, 107)
+                        .addComponent(jButton_listarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -72,7 +97,9 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField_passUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(50, 50, 50))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton_listarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jButton_salir.setText("SALIR");
@@ -140,12 +167,20 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_salirActionPerformed
-        System.exit(0);
+        
+
+        conexiones.ConexionesFicheros.escribirArchivoUsuarios();
+        
+        System.exit(0);   
+        
     }//GEN-LAST:event_jButton_salirActionPerformed
 
     private void jButton_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_aceptarActionPerformed
         
+        String usuario = jTextField_loginUsuario.getText();
+        String contrasenia = jTextField_passUsuario.getText();
         
+        conexiones.ConexionesArraysList.comprobarContrasenia(usuario, contrasenia);
         
         
         
@@ -155,33 +190,24 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_aceptarActionPerformed
 
     private void jButton_añadirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_añadirUsuarioActionPerformed
+       
+        conexiones.ConexionesArraysList.cargarUltimaID_usuario();
+        conexiones.ConexionesArraysList.añadirUsuarioAlArraylist(jTextField_loginUsuario, jTextField_passUsuario);
         
-        int id = clases.Usuario.contadorID;
-        
-        String nombre = jTextField_loginUsuario.getText();
-        String pass = jTextField_passUsuario.getText();
-        
-        clases.Almacen.listaUsuario.add(new Usuario(nombre, pass, id));
-        System.out.println("El usuario: " + nombre + " ha sido creado con la contraseña: " + pass);
-        
-        jTextField_loginUsuario.setText("");
-        jTextField_passUsuario.setText("");
-        
-        System.out.println("******Listado de Usuarios almacenados******");
-        
-        clases.Usuario.contadorID++;
-        
-        for(Usuario u:clases.Almacen.listaUsuario){
-            
-            System.out.println(u.toString());
-            
-        }//fin for
-        
-        
-        
-        
+           
         
     }//GEN-LAST:event_jButton_añadirUsuarioActionPerformed
+
+    private void jButton_listarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_listarUsuarioActionPerformed
+        
+    for(Usuario u:clases.Almacen.listaUsuario){
+            
+        System.out.println(u.toString());
+            
+    }//fin for
+        
+        
+    }//GEN-LAST:event_jButton_listarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -222,6 +248,7 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_aceptar;
     private javax.swing.JButton jButton_añadirUsuario;
+    private javax.swing.JButton jButton_listarUsuario;
     private javax.swing.JButton jButton_salir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
