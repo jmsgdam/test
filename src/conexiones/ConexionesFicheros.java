@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package conexiones;
 
 import clases.Usuario;
@@ -14,11 +11,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author chema
- */
+
 public class ConexionesFicheros {
+    
+    public static String rutaUsuarios = "C:\\Users\\Chema\\OneDrive - PRONAT\\SEGURIDAD\\Documentos\\CHEMA\\PROYECTOS\\24.-PROYECTOS NETBEANS\\Test_GitHub\\test_GitHub\\BD_usuarios.dat";
     
     public static void leerArchivoUsuarios(){
         
@@ -26,7 +22,7 @@ public class ConexionesFicheros {
             
             clases.Almacen.listaUsuario.clear();
             
-            ObjectInputStream leyendoFichero = new ObjectInputStream(new FileInputStream("BD_usuarios.dat"));
+            ObjectInputStream leyendoFichero = new ObjectInputStream(new FileInputStream(rutaUsuarios));
             
             clases.Almacen.listaUsuario = (ArrayList<Usuario>) leyendoFichero.readObject();
             leyendoFichero.close();
@@ -47,7 +43,7 @@ public class ConexionesFicheros {
         
         try{
             
-            ObjectOutputStream escribiendoFichero = new ObjectOutputStream(new FileOutputStream("BD_usuarios.dat"));
+            ObjectOutputStream escribiendoFichero = new ObjectOutputStream(new FileOutputStream(rutaUsuarios));
             
             escribiendoFichero.writeObject(clases.Almacen.listaUsuario);
             escribiendoFichero.close();
